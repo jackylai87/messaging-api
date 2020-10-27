@@ -83,4 +83,12 @@ class MessageTest < ActiveSupport::TestCase
 
     assert @sms.conversation_id == another_sms.conversation_id
   end
+
+  test "can only add to conversation of same platform" do
+    conversation = Conversation.create(platform: 'whatsapp')
+    @sms.save!
+    assert_raises(ActiveRecord::RecordInvalid) {
+      @sms.update!(conversation: conversation)
+    }
+  end
 end
