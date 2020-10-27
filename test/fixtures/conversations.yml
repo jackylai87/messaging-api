@@ -3,3 +3,4 @@
 one:
   status: open
   platform: sms
+  user: one

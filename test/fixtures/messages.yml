@@ -1,9 +1,17 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 message_one:
-  to: +60145586061
-  from: +60145586061
-  body: MyText
+  to: '+60145586061'
+  from: '+60145586061'
+  body: Sup
   platform: sms
   conversation: one
   message_type: inbound
+
+message_two:
+  to: '+60145586061'
+  from: '+60145586061'
+  body: Sup
+  platform: sms
+  conversation: one
+  message_type: outbound
