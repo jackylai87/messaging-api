@@ -8,7 +8,7 @@ class Message < ApplicationRecord
 
   belongs_to :conversation
   validate :only_same_platform, :reply_to_same_platform
-  before_validation :set_platform, :assign_to_coversation, on: :create
+  before_validation :set_platform, :assign_to_coversation, :set_outbound_from, on: :create
 
   private
   def extract_platform(contact)
@@ -53,8 +53,13 @@ class Message < ApplicationRecord
     unless extract_platform(self.to) == extract_platform(self.from)
       errors.add(
         :base,
-        "Receiver platform is different from sender platform"
+        "Receiver platform (#{self.to}) is different from sender platform (#{self.from})"
       )
     end
+  end
+
+  def set_outbound_from
+    return if self.inbound?
+    self.from = Rails.application.credentials.twilio[self.platform.to_sym]
   end
 end

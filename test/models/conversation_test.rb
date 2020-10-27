@@ -39,7 +39,14 @@ class ConversationTest < ActiveSupport::TestCase
 
   test 'should reply to same conversation' do
     conversation = conversations(:one)
-    message = conversation.send_message!(from: '+60145586061', to: '+60145586061', body: 'Hi', message_type: :outbound)
+    message = conversation.send_message!(to: '+60145586061', body: 'Hi', message_type: :outbound)
     assert conversation.id == message.conversation_id
+  end
+
+  test "outbound message set from column autmatically" do
+    conversation = Conversation.create(platform: 'whatsapp')
+    conversation.send_message!(to: 'whatsapp:+60145586061', body: 'Sup')
+
+    assert conversation.persisted?
   end
 end

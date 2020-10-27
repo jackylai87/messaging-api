@@ -109,7 +109,8 @@ class MessageTest < ActiveSupport::TestCase
       Message.create!(
         to: 'whatsapp:+60145586061',
         from: '+60145586061',
-        body: 'Hello There'
+        body: 'Hello There',
+        message_type: :inbound
       )
     }
   end
