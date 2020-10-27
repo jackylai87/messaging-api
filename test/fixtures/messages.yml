@@ -1,8 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 message_one:
-  to: MyString
-  from: MyString
+  to: +60145586061
+  from: +60145586061
   body: MyText
   platform: sms
   conversation: one

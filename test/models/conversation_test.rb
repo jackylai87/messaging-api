@@ -33,4 +33,10 @@ class ConversationTest < ActiveSupport::TestCase
     assert @sms.platform == @sms.conversation.platform
     assert @whatsapp.platform == @whatsapp.conversation.platform
   end
+
+  test 'should reply to same conversation' do
+    conversation = conversations(:one)
+    message = conversation.send_message!(from: '+60145586061', to: '+60145586061', body: 'Hi')
+    assert conversation.id == message.conversation_id
+  end
 end

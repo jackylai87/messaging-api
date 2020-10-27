@@ -9,4 +9,8 @@ class Conversation < ApplicationRecord
   }
 
   has_many :messages
+
+  def send_message!(**attr)
+    messages.create!(from: attr[:from], to: attr[:to], body: attr[:body], platform: self.platform)
+  end
 end

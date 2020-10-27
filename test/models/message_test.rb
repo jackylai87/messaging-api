@@ -91,4 +91,14 @@ class MessageTest < ActiveSupport::TestCase
       @sms.update!(conversation: conversation)
     }
   end
+
+  test "can only send to same platform" do
+    assert_raises(ActiveRecord::RecordInvalid){
+      Message.create!(
+        to: 'whatsapp:+60145586061',
+        from: '+60145586061',
+        body: 'Hello There'
+      )
+    }
+  end
 end
