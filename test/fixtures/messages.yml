@@ -4,4 +4,5 @@ message_one:
   to: MyString
   from: MyString
   body: MyText
-  platform: <%= ["sms", "messenger", "whatsapp"].sample %>
+  platform: sms
+  conversation: one

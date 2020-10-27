@@ -1,6 +1,26 @@
 require 'test_helper'
 
 class MessageTest < ActiveSupport::TestCase
+  setup do
+    @messenger = Message.new(
+      to: 'messenger:102542248309018',
+      from: 'messenger:4465012966906978',
+      body: 'Hello There'
+    )
+
+    @whatsapp = Message.new(
+      to: 'whatsapp:+60145586061',
+      from: 'whatsapp:+60145586061',
+      body: 'Hello There'
+    )
+
+    @sms = Message.new(
+      to: '+60145586061',
+      from: '+60145586061',
+      body: 'Hello There'
+    )
+  end
+
   test "message have id uuid type" do
     assert = Message.columns.find{|col| col.name == 'id'}.sql_type == 'uuid'
   end
@@ -39,5 +59,28 @@ class MessageTest < ActiveSupport::TestCase
 
   test "twilio_response default to empty hash" do
     assert messages(:message_one).twilio_response == {}
+  end
+
+  test "should self set message platform" do
+    [@sms, @messenger, @whatsapp].each{ |message| message.save! }
+    assert @sms.sms?
+    assert @messenger.messenger?
+    assert @whatsapp.whatsapp?
+  end
+
+  test "should self assign to conversation" do
+    @sms.save!
+    assert_not @sms.conversation_id.nil?
+  end
+
+  test "should assign to existing conversation" do
+    @sms.save!
+    another_sms = Message.create(
+      to: '+60145586061',
+      from: '+60145586061',
+      body: 'Hello please'
+    )
+
+    assert @sms.conversation_id == another_sms.conversation_id
   end
 end

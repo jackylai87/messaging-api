@@ -1,7 +1,7 @@
 module Conversable
   extend ActiveSupport::Concern
 
-  include do
+  included do
     enum platform: {
       sms: 'sms',
       messenger: 'messenger',
