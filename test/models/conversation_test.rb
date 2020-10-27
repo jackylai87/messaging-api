@@ -49,4 +49,8 @@ class ConversationTest < ActiveSupport::TestCase
 
     assert conversation.persisted?
   end
+
+  test "belongs to user" do
+    assert conversations(:one).respond_to? "user"
+  end
 end

@@ -65,7 +65,7 @@ class Message < ApplicationRecord
   end
 
   def send_to_twilio
-    return if Rails.env.development?
+    return unless Rails.env.production?
     request = {
       from: self.from,
       to: self.to,
