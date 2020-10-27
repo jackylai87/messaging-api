@@ -45,8 +45,8 @@ CREATE TABLE public.ar_internal_metadata (
 
 CREATE TABLE public.conversations (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
-    status character varying,
-    platform character varying,
+    status character varying DEFAULT 'open'::character varying NOT NULL,
+    platform character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -60,6 +60,7 @@ CREATE TABLE public.messages (
     id uuid DEFAULT public.gen_random_uuid() NOT NULL,
     "to" character varying NOT NULL,
     "from" character varying NOT NULL,
+    message_type character varying NOT NULL,
     body text NOT NULL,
     twilio_response jsonb DEFAULT '{}'::jsonb NOT NULL,
     platform character varying NOT NULL,

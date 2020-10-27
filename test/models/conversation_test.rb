@@ -5,19 +5,22 @@ class ConversationTest < ActiveSupport::TestCase
     @messenger = Message.new(
       to: 'messenger:102542248309018',
       from: 'messenger:4465012966906978',
-      body: 'Hello There'
+      body: 'Hello There',
+      message_type: :inbound
     )
 
     @whatsapp = Message.new(
       to: 'whatsapp:+60145586061',
       from: 'whatsapp:+60145586061',
-      body: 'Hello There'
+      body: 'Hello There',
+      message_type: :inbound
     )
 
     @sms = Message.new(
       to: '+60145586061',
       from: '+60145586061',
-      body: 'Hello There'
+      body: 'Hello There',
+      message_type: :inbound
     )
   end
   
@@ -36,7 +39,7 @@ class ConversationTest < ActiveSupport::TestCase
 
   test 'should reply to same conversation' do
     conversation = conversations(:one)
-    message = conversation.send_message!(from: '+60145586061', to: '+60145586061', body: 'Hi')
+    message = conversation.send_message!(from: '+60145586061', to: '+60145586061', body: 'Hi', message_type: :outbound)
     assert conversation.id == message.conversation_id
   end
 end

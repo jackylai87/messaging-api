@@ -4,7 +4,8 @@ class Twilio::MessagesController < ApplicationController
       to: params[:To],
       from: params[:From],
       body: params[:Body],
-      twilio_response: params.as_json(except: [:controller, :action])
+      twilio_response: params.as_json(except: [:controller, :action]),
+      message_type: 'inbound'
     )
 
     begin

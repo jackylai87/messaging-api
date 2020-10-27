@@ -6,3 +6,4 @@ message_one:
   body: MyText
   platform: sms
   conversation: one
+  message_type: inbound

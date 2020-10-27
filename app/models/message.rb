@@ -1,6 +1,11 @@
 class Message < ApplicationRecord
   include Conversable
 
+  enum message_type: {
+    inbound: 'inbound',
+    outbound: 'outbound'
+  }
+
   belongs_to :conversation
   validate :only_same_platform, :reply_to_same_platform
   before_validation :set_platform, :assign_to_coversation, on: :create
@@ -18,12 +23,12 @@ class Message < ApplicationRecord
   end
 
   def set_platform
-    return unless self.platform.nil?
+    return if self.outbound?
     self.platform = extract_platform(self.to)
   end
 
   def assign_to_coversation
-    return unless self.conversation_id.nil?
+    return if self.outbound?
     message = self.class.find_by(from: self.from)
 
     if message

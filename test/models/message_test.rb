@@ -5,19 +5,22 @@ class MessageTest < ActiveSupport::TestCase
     @messenger = Message.new(
       to: 'messenger:102542248309018',
       from: 'messenger:4465012966906978',
-      body: 'Hello There'
+      body: 'Hello There',
+      message_type: 'inbound'
     )
 
     @whatsapp = Message.new(
       to: 'whatsapp:+60145586061',
       from: 'whatsapp:+60145586061',
-      body: 'Hello There'
+      body: 'Hello There',
+      message_type: 'inbound'
     )
 
     @sms = Message.new(
       to: '+60145586061',
       from: '+60145586061',
-      body: 'Hello There'
+      body: 'Hello There',
+      message_type: 'inbound'
     )
   end
 
@@ -57,6 +60,14 @@ class MessageTest < ActiveSupport::TestCase
     }
   end
 
+  test "raise error if null message type column" do
+    assert_raises(ActiveRecord::NotNullViolation) {
+      message = messages(:message_one)
+      message.message_type = nil
+      message.save!
+    }
+  end
+
   test "twilio_response default to empty hash" do
     assert messages(:message_one).twilio_response == {}
   end
@@ -78,7 +89,8 @@ class MessageTest < ActiveSupport::TestCase
     another_sms = Message.create(
       to: '+60145586061',
       from: '+60145586061',
-      body: 'Hello please'
+      body: 'Hello please',
+      message_type: :inbound
     )
 
     assert @sms.conversation_id == another_sms.conversation_id
