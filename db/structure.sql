@@ -49,6 +49,7 @@ CREATE TABLE public.messages (
     "from" character varying NOT NULL,
     body text NOT NULL,
     twilio_response jsonb DEFAULT '{}'::jsonb NOT NULL,
+    platform character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
