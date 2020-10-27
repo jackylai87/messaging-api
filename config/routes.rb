@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   namespace :twilio do
     resources :messages, only: [:create]
   end
+
+  resources :conversations, except: [:create]
 end

@@ -4,7 +4,8 @@ class Conversation < ApplicationRecord
   enum status: {
     open: 'open',
     assigned: 'assigned',
-    closed: 'closed'
+    closed: 'closed',
+    archived: 'archived'
   }
 
   has_many :messages
