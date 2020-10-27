@@ -9,6 +9,7 @@ class Message < ApplicationRecord
   belongs_to :conversation
   validate :only_same_platform, :reply_to_same_platform
   before_validation :set_platform, :assign_to_coversation, :set_outbound_from, on: :create
+  before_create :send_to_twilio, if: :inbound?
 
   private
   def extract_platform(contact)
@@ -61,5 +62,20 @@ class Message < ApplicationRecord
   def set_outbound_from
     return if self.inbound?
     self.from = Rails.application.credentials.twilio[self.platform.to_sym]
+  end
+
+  def send_to_twilio
+    return if Rails.env.development?
+    request = {
+      from: self.from,
+      to: self.to,
+      body: self.body
+    }
+
+    if !self.sms?
+      # Send attachment
+    end
+
+    TWILIO_CLIENT.messages.create(request)
   end
 end
