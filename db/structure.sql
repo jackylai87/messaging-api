@@ -40,6 +40,19 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: conversations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.conversations (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    status character varying,
+    platform character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
 -- Name: messages; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -50,6 +63,7 @@ CREATE TABLE public.messages (
     body text NOT NULL,
     twilio_response jsonb DEFAULT '{}'::jsonb NOT NULL,
     platform character varying NOT NULL,
+    conversation_id uuid,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -73,6 +87,14 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
+-- Name: conversations conversations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conversations
+    ADD CONSTRAINT conversations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: messages messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -89,6 +111,21 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: index_messages_on_conversation_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_messages_on_conversation_id ON public.messages USING btree (conversation_id);
+
+
+--
+-- Name: messages fk_rails_7f927086d2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.messages
+    ADD CONSTRAINT fk_rails_7f927086d2 FOREIGN KEY (conversation_id) REFERENCES public.conversations(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -96,6 +133,7 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20201026100926'),
+('20201026101904'),
 ('20201026102051');
 
 

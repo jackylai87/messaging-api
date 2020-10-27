@@ -1,7 +1,5 @@
 class Message < ApplicationRecord
-  enum platform: {
-    sms: 'sms',
-    messenger: 'messenger',
-    whatsapp: 'whatsapp'
-  }
+  include Conversable
+
+  belongs_to :conversation
 end

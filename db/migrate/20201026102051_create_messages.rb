@@ -6,6 +6,7 @@ class CreateMessages < ActiveRecord::Migration[6.0]
       t.text :body, null: false
       t.jsonb :twilio_response, null: false, default: {}
       t.string :platform, null: false
+      t.references :conversation, foreign_key: true, type: :uuid
 
       t.timestamps
     end
