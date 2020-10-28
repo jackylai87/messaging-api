@@ -11,3 +11,9 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 end
+
+class ActionDispatch::IntegrationTest
+  def login_in_as(email, password)
+    post login_path, params: { email: email, password: 'asdf1234' }
+  end
+end

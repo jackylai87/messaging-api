@@ -35,5 +35,9 @@ module MessagingApi
     config.api_only = true
     config.active_record.schema_format = :sql
     config.active_record.primary_key = :uuid
+
+    config.session_store :cookie_store, key: '_messaging_api'
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use config.session_store, config.session_options
   end
 end

@@ -1,9 +1,12 @@
 require 'test_helper'
 
 class ConversationsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    login_in_as(users(:one).email, 'asdf1234')
+  end
+
   test "can list all conversations" do
     assert_routing '/conversations', controller: 'conversations', action: 'index'
-    
     get conversations_url
     assert_response :ok
   end
