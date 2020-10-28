@@ -1,6 +1,7 @@
 class ConversationsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   before_action :set_conversation, only: [:show, :update]
+  # before_action :only_logged_in, :set_user
   
   def index
     @conversations = Conversation.includes(:messages).where(status: params[:status] || 'open')
@@ -31,5 +32,15 @@ class ConversationsController < ApplicationController
 
   def conversation_params
     params.require(:conversation).permit(:status)
+  end
+
+  def only_logged_in
+    if session[:user].nil?
+      render json: {message: 'Unauthorized Request'}, status: :unauthorized
+    end
+  end
+
+  def set_user
+    @user = User.find(session[:user])
   end
 end
