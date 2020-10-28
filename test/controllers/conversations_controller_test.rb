@@ -47,4 +47,19 @@ class ConversationsControllerTest < ActionDispatch::IntegrationTest
     patch conversation_url(conversations(:one).id), params: {conversation: {status: '123'}}
     assert_response :bad_request
   end
+
+  test "should able to send message" do
+    assert_routing(
+      {
+        path: "/conversations/#{conversations(:one).id}/send_message",
+        method: :post
+      }, 
+      controller: 'conversations', 
+      action: 'send_message', 
+      id: conversations(:one).id
+    )
+
+    post send_message_conversation_path(conversations(:one).id), params: {to: '+60145586061', body: 'Sup'}
+    assert_response :ok
+  end
 end

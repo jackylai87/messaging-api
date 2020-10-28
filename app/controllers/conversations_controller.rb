@@ -1,7 +1,7 @@
 class ConversationsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   before_action :only_logged_in, :set_user
-  before_action :set_conversation, only: [:show, :update]
+  before_action :set_conversation, only: [:show, :update, :send_message]
   
   def index
     @conversations = Conversation.includes(:messages).where(status: params[:status] || 'open')
@@ -18,6 +18,15 @@ class ConversationsController < ApplicationController
       render json: {message: 'Successfully updated conversation status'}, status: :ok
     rescue ActiveRecord::RecordInvalid, ArgumentError
       render json: {message: 'Unable to update conversation'}, status: :bad_request
+    end
+  end
+
+  def send_message
+    begin
+      @conversation.send_message!(to: params[:to], body: params[:body])
+      render json: {message: 'Message sent'}, status: :ok
+    rescue ActiveRecord::RecordInvalid
+      render json: {message: 'Unable to send message'}, status: :bad_request
     end
   end
 

@@ -4,7 +4,11 @@ Rails.application.routes.draw do
     resources :messages, only: [:create]
   end
 
-  resources :conversations, except: [:create]
+  resources :conversations, except: [:create] do
+    member do
+      post 'send_message', to: 'conversations#send_message'
+    end
+  end
 
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
