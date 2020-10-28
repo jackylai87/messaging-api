@@ -10,6 +10,7 @@ class Conversation < ApplicationRecord
 
   has_many :messages
   belongs_to :user, optional: true
+  belongs_to :participant
   validate :assigned_if_have_user
 
   def send_message!(**attr)

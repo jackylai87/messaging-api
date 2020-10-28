@@ -1,0 +1,10 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+participant_sms:
+  contact: <%= '+60145586061' %>
+
+participant_whatsapp:
+  contact: <%= 'whatsapp:+60145586061' %>
+
+participant_messenger:
+  contact: <%= 'messenger:123123123' %>

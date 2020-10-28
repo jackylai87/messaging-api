@@ -25,7 +25,8 @@ class ConversationTest < ActiveSupport::TestCase
   end
   
   test "should default to open" do
-    assert Conversation.create!(platform: 'sms')
+    participant = Participant.create!(contact: '+123123123')
+    assert participant.conversation.open?
   end
 
   test "should follow messages platform" do
@@ -43,11 +44,10 @@ class ConversationTest < ActiveSupport::TestCase
     assert conversation.id == message.conversation_id
   end
 
-  test "outbound message set from column autmatically" do
-    conversation = Conversation.create(platform: 'whatsapp')
-    conversation.send_message!(to: 'whatsapp:+60145586061', body: 'Sup')
-
-    assert conversation.persisted?
+  test "outbound message set from column automatically" do
+    conversation = conversations(:one)
+    message = conversation.send_message!(to: '+60145586061', body: 'Sup')
+    assert_not message.from.nil?
   end
 
   test "belongs to user" do

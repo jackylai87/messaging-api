@@ -30,13 +30,9 @@ class Message < ApplicationRecord
 
   def assign_to_coversation
     return if self.outbound?
-    message = self.class.find_by(from: self.from)
-
-    if message
-      self.conversation_id = message.conversation_id
-    else
-      self.conversation = Conversation.create!(platform: self.platform)
-    end
+    
+    participant = Participant.find_or_create_by(contact: self.from)
+    self.conversation_id = participant.conversation.id
   end
 
   def only_same_platform

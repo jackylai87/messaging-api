@@ -49,7 +49,8 @@ CREATE TABLE public.conversations (
     platform character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    user_id uuid
+    user_id uuid,
+    participant_id uuid NOT NULL
 );
 
 
@@ -66,6 +67,18 @@ CREATE TABLE public.messages (
     twilio_response jsonb DEFAULT '{}'::jsonb NOT NULL,
     platform character varying NOT NULL,
     conversation_id uuid,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: participants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.participants (
+    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    contact character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
@@ -119,6 +132,14 @@ ALTER TABLE ONLY public.messages
 
 
 --
+-- Name: participants participants_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.participants
+    ADD CONSTRAINT participants_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -135,6 +156,13 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: index_conversations_on_participant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_conversations_on_participant_id ON public.conversations USING btree (participant_id);
+
+
+--
 -- Name: index_conversations_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -146,6 +174,13 @@ CREATE INDEX index_conversations_on_user_id ON public.conversations USING btree 
 --
 
 CREATE INDEX index_messages_on_conversation_id ON public.messages USING btree (conversation_id);
+
+
+--
+-- Name: index_participants_on_contact; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_participants_on_contact ON public.participants USING btree (contact);
 
 
 --
@@ -172,6 +207,14 @@ ALTER TABLE ONLY public.messages
 
 
 --
+-- Name: conversations fk_rails_d6a9ddc2a3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conversations
+    ADD CONSTRAINT fk_rails_d6a9ddc2a3 FOREIGN KEY (participant_id) REFERENCES public.participants(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -181,6 +224,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20201026100926'),
 ('20201026101904'),
 ('20201026102051'),
-('20201027092315');
+('20201027092315'),
+('20201028041358');
 
 

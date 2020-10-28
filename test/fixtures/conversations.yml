@@ -4,7 +4,9 @@ one:
   status: assigned
   platform: sms
   user: one
+  participant: participant_sms
 
 unassigned:
   status: open
   platform: whatsapp
+  participant: participant_whatsapp

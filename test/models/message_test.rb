@@ -112,6 +112,12 @@ class MessageTest < ActiveSupport::TestCase
         body: 'Hello There',
         message_type: :inbound
       )
+      # conversations(:one).messages.create!(
+      #   to: 'whatsapp:+60145586061',
+      #   from: '+60145586061',
+      #   body: 'Sup',
+      #   message_type: :inbound
+      # )
     }
   end
 end
