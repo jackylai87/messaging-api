@@ -53,4 +53,22 @@ class ConversationTest < ActiveSupport::TestCase
   test "belongs to user" do
     assert conversations(:one).respond_to? "user"
   end
+
+  test "should be able to assign conversation" do
+    assert_nothing_raised do 
+      conversations(:unassigned).assign_to(users(:one).id)
+    end
+  end
+
+  test "should be able to unassign conversation" do
+    assert_nothing_raised do
+      conversations(:one).unassign
+    end
+  end
+
+  test "should can only in assign status if have user" do
+    assert_raises(ConversationError::FailedToAssign){
+      conversations(:unassigned).assigned!
+    }
+  end
 end
