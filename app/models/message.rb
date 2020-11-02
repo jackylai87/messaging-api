@@ -72,6 +72,28 @@ class Message < ApplicationRecord
       # Send attachment
     end
 
-    TWILIO_CLIENT.messages.create(request)
+    response = TWILIO_CLIENT.messages.create(request)
+
+    twilio_response = outbound_twilio_response(response)
+    self.twilio_response = twilio_response
+  end
+
+  def outbound_twilio_response(response)
+    {
+      from: response.from,
+      to: response.to,
+      body: response.body,
+      direction: response.direction,
+      error_message: response.error_message,
+      uri: response.uri,
+      account_sid: response.account_sid,
+      num_media: response.num_media,
+      messaging_service_sid: response.messaging_service_sid,
+      sid: response.sid,
+      date_created: response.date_created,
+      error_code: response.error_code,
+      api_version: response.api_version,
+      subresource_uris: response.subresource_uris
+    }
   end
 end
