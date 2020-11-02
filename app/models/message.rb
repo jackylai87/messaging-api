@@ -9,7 +9,7 @@ class Message < ApplicationRecord
   belongs_to :conversation
   validate :only_same_platform, :reply_to_same_platform
   before_validation :set_platform, :assign_to_coversation, :set_outbound_from, on: :create
-  before_create :send_to_twilio, if: :inbound?
+  before_create :send_to_twilio, if: :outbound?
 
   private
   def extract_platform(contact)
